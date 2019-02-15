@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Validator;
 use JWTFactory;
 use JWTAuth;
+use HandleResponse;
 use App\User;
 use App\Http\Resources\User as UserResource;
 use App\Http\Resources\UserCollection;
@@ -40,32 +41,15 @@ class UserController extends Controller
 
         try {
             if (!JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'Wrong credentials', 'message' => 'Check email and password']);
-            }
-            else {
-                $user = User::first();
-                $payloadable = [
-                    'subject' => $user->id,
-                    'username' => $user->username,
-                    'email' => $user->email,
-                    'pic' => $user->pic
-                ];
+                return HandleResponse::jsonResponse('wrong_creds');
             }
         } catch (JWTException $e) {
-            return response()->json(['error' => 'Authentication error']);
+            return HandleResponse::jsonResponse('auth_error');
         }
-        $token = JWTAuth::fromUser($user, $payloadable);
-        $response["data"]["user"] = $payloadable;
-        $response["data"]["token"] = $token;
-
-        // return $data = new UserResource(
-        //     User::where('email', $request->email)
-        //     ->where('password', $request->password)
-        //     ->firstOrFail());
-
-        // $data["error"] = "Not found";
-        // $data["message"] = "User not found";
-        return response()->json($response);
+        $user = User::first();
+        $token = JWTAuth::fromUser($user);
+        $payloadable = new UserResource($user);
+        return $this->respondWithToken($token, $payloadable);
     }
     
     public function doRegister(Request $request) {
@@ -86,12 +70,24 @@ class UserController extends Controller
         ]);
 
         if (!$newUser) {
-            $response["data"]["error"] = "Oops!!";
-            $response["data"]["message"] = "Some error occured";
+            return HandleResponse::jsonResponse('register_error');
         }
-        $response["data"]["error"] = "Success";
-        $response["data"]["message"] = "Your account is registered";
+        else {
+            return HandleResponse::jsonResponse('register_success');
+        }
 
         return response()->json($response);
+    }
+
+    protected function respondWithToken($token, $payloadable)
+    {
+      return response()->json([
+        'access_token' => $token,
+        'token_type' => 'bearer',
+        // 'expires_in' => auth()->factory()->getTTL() * 60,
+        'data' => [
+            'user' => $payloadable
+        ]
+      ]);
     }
 }

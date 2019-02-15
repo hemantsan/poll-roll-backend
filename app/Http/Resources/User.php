@@ -19,8 +19,8 @@ class User extends Resource
             'username' => $this->username,
             'email' => $this->email,
             'pic' => $this->pic,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => (String) $this->created_at,
+            'updated_at' => (String) $this->updated_at,
         ];
         // return parent::toArray($request);
     }
