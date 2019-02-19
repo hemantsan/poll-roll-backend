@@ -35,6 +35,22 @@ class HandleResponse {
                     'status' => 'success'
                 ]);
                 break;  
+        
+            case 'poll_create_error':
+                return response()->json([
+                    'error' => 'Oops !!',
+                    'message' => 'Poll couldn\'t be created',  
+                    'status' => 'error'
+                ]);
+                break; 
+        
+            case 'poll_create_success':
+                return response()->json([
+                    'error' => 'YeeHaa !!',
+                    'message' => 'Poll created successfully',  
+                    'status' => 'success'
+                ]);
+                break; 
             default:
                 # code...
                 break;

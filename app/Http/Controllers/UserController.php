@@ -76,7 +76,7 @@ class UserController extends Controller
             return HandleResponse::jsonResponse('register_success');
         }
 
-        return response()->json($response);
+        // return response()->json($response);
     }
 
     protected function respondWithToken($token, $payloadable)

@@ -24,3 +24,7 @@ Route::apiResource('users', 'UserController');
 Route::get('users/fetch-all', 'UserController@fetchAll');
 Route::post('users/do-login', 'UserController@doLogin');
 Route::post('users/register', 'UserController@doRegister');
+
+Route::apiResource('polls', 'PollsController');
+Route::get('polls/fetch-all', 'PollsController@index');
+Route::post('polls/create', 'PollsController@store');
