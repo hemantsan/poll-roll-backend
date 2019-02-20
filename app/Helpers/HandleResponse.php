@@ -2,11 +2,11 @@
 namespace App\Helpers;
  
 class HandleResponse {
-    public static function jsonResponse($case) {
+    public static function jsonResponse($case, $response='') {
         switch ($case) {
             case 'wrong_creds':
                 return response()->json([
-                    'error' => 'Wrong credentials',
+                    'title' => 'Wrong credentials',
                     'message' => 'Check email and password',
                     'status' => 'error'
                 ]);
@@ -14,7 +14,7 @@ class HandleResponse {
             
             case 'auth_error':
                 return response()->json([
-                    'error' => 'Authentication Error',
+                    'title' => 'Authentication Error',
                     'message' => 'Some error occured',
                     'status' => 'error'
                 ]);
@@ -22,7 +22,7 @@ class HandleResponse {
             
             case 'register_error':
                 return response()->json([
-                    'error' => 'Error !!',
+                    'title' => 'Error !!',
                     'message' => 'Some error occured',
                     'status' => 'error'
                 ]);
@@ -30,7 +30,7 @@ class HandleResponse {
         
             case 'register_success':
                 return response()->json([
-                    'error' => 'YeeHaa !!',
+                    'title' => 'YeeHaa !!',
                     'message' => 'Account created successfully',  
                     'status' => 'success'
                 ]);
@@ -38,7 +38,7 @@ class HandleResponse {
         
             case 'poll_create_error':
                 return response()->json([
-                    'error' => 'Oops !!',
+                    'title' => 'Oops !!',
                     'message' => 'Poll couldn\'t be created',  
                     'status' => 'error'
                 ]);
@@ -46,13 +46,29 @@ class HandleResponse {
         
             case 'poll_create_success':
                 return response()->json([
-                    'error' => 'YeeHaa !!',
+                    'title' => 'YeeHaa !!',
                     'message' => 'Poll created successfully',  
                     'status' => 'success'
                 ]);
                 break; 
+        
+            case 'token_invalid':
+                return response()->json([
+                    'title' => 'Error !!',
+                    'message' => 'Authentication error',  
+                    'status' => 'error'
+                ]);
+                break;
+        
+            case 'token_expired':
+                return response()->json([
+                    'title' => 'Oops !!',
+                    'message' => 'Your login expired, Login again.',  
+                    'status' => 'error'
+                ]);
+                break;
             default:
-                # code...
+                return response()->json($response);
                 break;
         }
     }

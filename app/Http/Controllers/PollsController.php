@@ -43,6 +43,7 @@ class PollsController extends Controller
             'question' => $request->get('question'),
             'created_by' => 1
         ]);
+        // return HandleResponse::jsonResponse('', $token = $request->header('Authorization'));
 
         if (!$newPoll) {
             return HandleResponse::jsonResponse('poll_create_error');

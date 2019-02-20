@@ -18,8 +18,8 @@ class PollsResource extends Resource
             'id' => $this->id,
             'question' => $this->question,
             'created_by' => $this->created_by,
-            'created_at' => (String) $this->created_at,
-            'updated_at' => (String) $this->updated_at,
+            'created_at' => (String) $this->created_at->diffForHumans(),
+            'updated_at' => (String) $this->updated_at->diffForHumans(),
         ];
     }
 }

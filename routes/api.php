@@ -12,19 +12,23 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::middleware('auth:api')->get('users', function(Request $request) {
-    return auth()->user();
-});
-
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
+// Route::middleware('jwt.auth')->get('users', function(Request $request) {
+//     return auth()->user();
 // });
 
-Route::apiResource('users', 'UserController');
-Route::get('users/fetch-all', 'UserController@fetchAll');
+// Route::group(['middleware' => ['api']], function () {
+//     Route::post('users/do-login', 'UserController@doLogin');
+//     Route::group(['middleware' => 'jwt.auth'], function () {
+//     });
+// });
+
 Route::post('users/do-login', 'UserController@doLogin');
 Route::post('users/register', 'UserController@doRegister');
 
-Route::apiResource('polls', 'PollsController');
-Route::get('polls/fetch-all', 'PollsController@index');
-Route::post('polls/create', 'PollsController@store');
+Route::middleware('jwt-auth')->group(function(){
+    Route::apiResource('polls', 'PollsController');
+    Route::get('polls/fetch-all', 'PollsController@index');
+    Route::post('polls/create', 'PollsController@store');
+    Route::apiResource('users', 'UserController');
+    Route::get('users/fetch-all', 'UserController@fetchAll');
+});
